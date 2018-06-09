@@ -38,8 +38,13 @@ mins <- apply(df[1:4],2,min)
 scaled.df <- scale(df[1:4],center = mins,scale= maxs-mins)
 scaled.df <- as.data.frame(scaled.df)
 #After we scaled data I found out that in classification problem we do not do this, so let`s proceed with our df
+set.seed(101)
 df$fac.skew <- NULL
 n <- names(df)
+set.seed(101)
+split = sample.split(df$Class, SplitRatio = 0.70)
+train = subset(df, split == TRUE)
+test = subset(df, split == FALSE)
 f <- as.formula(paste('Class ~' , paste(n[!n %in% 'Class'],collapse = '+')))
 nn <- neuralnet(f,train,linear.output= F, hidden = 10 )
 predicted <- neuralnet::compute(nn, test[,1:4])
